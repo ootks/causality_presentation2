@@ -480,8 +480,8 @@
                         <ul>
                             <li> $G = (V, E)$ is a directed acyclic graph. </li>
                             <li> $V$ is a set of random variables. </li>
-                            <li> Each $\textbf{v} \in V$ has a set of parents, $\text{pa}(v)$, which have edges into $\textbf{v}$. </li>
-                            <li> For each $\textbf{v} \in V$, $\textbf{v}$ is conditionally independent of $V \setminus (\text{pa}(\textbf{v}) \cup \{\textbf{v}\})$ given $\text{pa}(\textbf{v})$. </li>
+                            <li> Each $\textbf{V} \in V$ has a set of parents, $\text{pa}(\textbf{V})$, which have edges into $\textbf{V}$. </li>
+                            <li> For each $\textbf{V} \in V$, $\textbf{V}$ is conditionally independent of $V \setminus (\text{pa}(\textbf{V}) \cup \{\textbf{V}\})$ given $\text{pa}(\textbf{V})$. </li>
                         </ul>
                     </section>
                     <section>
@@ -490,10 +490,10 @@
                         </div>
                         <div class='right' style='float:right;width:40%;margin-top:130px'>
                             <ul style="margin-left:-40px">
-                                <li class="fragment fade-in"> Each node $v$ depends 'causally' on only its parents. </li>
-                                <li class="fragment fade-in">  have a conditional probability of $\textbf{v}$ given its parents:
+                                <li class="fragment fade-in"> Each node $\textbf{V}$ depends 'causally' on only its parents. </li>
+                                <li class="fragment fade-in">  have a conditional probability of $\textbf{V}$ given its parents:
                                     \[
-                                    \text{Pr}(\textbf{v} = x | \textbf{pa(v)} = y)
+                                    \text{Pr}(\textbf{V} = x | \textbf{pa(v)} = y)
                                     \]
                            </ul>
                         </div>
@@ -882,7 +882,7 @@
                     <h2>Causation</h2>
                     <small> We can write down what the interventional distribution is explicitly in terms of the model parameters (here $\textbf{W}$ is a subset of the variables) </small>
                     \[
-                    \text{pr}(\textbf{W} = w | \text{do}(\textbf{X} = x)) =
+                    \text{Pr}(\textbf{W} = w | \text{do}(\textbf{X} = x)) =
                     \]
                     \[
                     \sum_{\textbf{V}_i \not \in \textbf{W}}\prod_{\textbf{V}_i \in V \setminus X} \text{Pr}(\textbf{V}_i = v_i | \text{pa}(\textbf{V}_i) = \text{pa}(v_i), \textbf{X} = x)
@@ -1254,17 +1254,119 @@
                 <!-- TODO: Explain the backdoor criterion -->
                 <section>
                     <h3> Limits of Identifiability </h3>
-                    <p> Not all networks of interest are identifiable.</p>
-                    <p> For nonidentifiable networks, there isn't a single interventional distribution, and instead we should think of a 'space' of posssible interventional distributions.</p>
-                    <p> Can we narrow down the size of this space if we make additional assumptions? </p>
+                    <ul>
+                    <li> Not all networks of interest are identifiable, so the interventional distribution is ambiguous.</li>
+                    <li> Exact answers are not needed; we might really just care about 'will this intervention have a positive effect?'.</li>
+                    <li> We need to think about a 'space' of posssible interventional distributions, and try to control it.</li>
+                    </ul>
                 </section>
 
                 <section>
                     <h3> Probability Equations </h3>
-                    <p> Not all networks of interest are identifiable.</p>
-                    <p> For nonidentifiable networks, there isn't a single interventional distribution, and instead we should think of a 'space' of posssible interventional distributions.</p>
+                    <ul>
+                    <li> Recall that a Bayesian network is entirely specified by the parameters $\text{Pr}(\textbf{X} = x | \textbf{pa}(\textbf{X}) = p)$. </li>
+                    <li> These parameters are just numbers satisfying some equations:
+                        \[
+                        \forall p, \;\sum_{x} \text{Pr}(\textbf{X} = x | \textbf{pa}(\textbf{X}) = p) = 1
+                        \]
+                        \[
+                        \forall x, p \;\text{Pr}(\textbf{X} = x | \textbf{pa}(\textbf{X}) = p) \ge 0
+                        \]
+                    </ul>
                 </section>
 
+                <section>
+                    <h3> Observed Equations </h3>
+                    Our knowledge of the marginal on observed variables also gives us some equations that we know these parameters satisfy:
+                        \[
+                        \forall v, \; \sum_{u} \prod_{\textbf{V}_i \in V}\text{Pr}(\textbf{V}_i = v_i | \textbf{pa}(\textbf{V}_i) = \text{pa}(v_i))\]
+                        \[ = \text{Pr}(V_{obs} = v_{obs})
+                        \]
+                        where this sum is over all settings to the unobserved variables, and $\text{Pr}(V_{obs})$ is the marginal distribution on the observed variables.
+                </section>
+
+                <section>
+                    <h3> Semialgebraic Sets </h3>
+                    <ul>
+                        <li> The upshot of the previous two slides is that the possible models consistent with this observed distribution are those satisfying a set of <b> polynomial </b> inequalities.</li>
+                        <li> Such a set is said to be <b> semialgebraic</b>.</li>
+                        <li> There has been a lot of work on optimization of polynomial functions on semialgebraic sets.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3> Theorem 1: The Space of Interventional Distributions is Semialgebraic </h3>
+                     <b> Theorem </b> <i> (Tarski-Seidenberg) </i> <b>- The image of a semialgebraic set under a polynomial map is semialgebraic.</b>
+                    <ul>
+                        <li> Recall that the interventional distribution is a polynomial map of the model parameters. </li>
+                        <li> We immediately get that the space of interventional distributions is semialgebraic. </li>
+                        <li> There are examples where the space of interventional distributions requires exponentially many polynomial inequalities to define. </li>
+                    </ul>
+                </section>
+
+
+                <section>
+                    <h3> Optimization over all Interventional Distributions </h3>
+                    <ul>
+                        <li> We might want to know something like "prescribing this drug will improve a patient's chance of recovery". </li>
+                        <li> To get this result, we would want to show that a lower bound on the minimum of some function over the space of interventional distributions. </li>
+                        <li> If this function is linear, we get a polynomial optimization problem (which has a compact formulation). </li>
+                    </ul>
+                </section>
+
+                <section>
+                    \[\text{minimize } \sum_{v,x} \alpha_{v,x} \text{Pr}(\textbf{W} = w | \text{do}(\textbf{X} = x))\]
+                    \[\text{subject to } \text{Pr}(\textbf{W} = w | \text{do}(\textbf{X} = x)) \]
+                    \[ \hspace{9em}= \sum_{\textbf{V}_i \not \in \textbf{W}}\prod_{\textbf{V}_i \in V \setminus X} \text{Pr}(\dots) \]
+                        \[ \hspace{7em}    \forall v, \; \sum_{u} \prod_{\textbf{V}_i \in V}\text{Pr}(\textbf{V}_i = v_i | \textbf{pa}(\textbf{V}_i) = \text{pa}(v_i))\]
+                        \[\hspace{6.5em}    = \text{Pr}(V_{obs} = v_{obs}) \]
+                        \[ \dots \]
+                </section>
+                <section>
+                    <h3> Low Mutual Information Bound </h3>
+                    <section>
+                        <p style="margin-top:80px"> We will look at the following Bayesian network:</p>
+                    <svg width="700px" height="800px" viewBox="-40 0 800 100">
+                          <defs>
+                            <marker
+                               id="arrowhead1"
+                               refX="0"
+                               refY="0"
+                               orient="auto">
+                              <path
+                                 transform="matrix(-0.8,0,0,-0.8,-10,0)"
+                                 style="fill:#FFFFFF;fill-opacity:1;fill-rule:evenodd"
+                                 d="M -5,0 0,-5 -17.5,0 0,5 Z" />
+                            </marker>
+                          </defs>
+                          <g>
+                            <circle cx="350" cy="-230" r="67" fill="#99ffff" stroke="black" />
+                            <text x="311" y="-230" font-family="Verdana" font-size="20"
+                                  fill="black" stroke="black" stroke-width="2">
+                            X
+                            </text>
+                              <line x1="275" y1="-193" x2="150" y2="-80" stroke="#FFF"
+                              stroke-width="8" marker-end="url(#arrowhead1)" />
+                              <line x1="425" y1="-193" x2="550" y2="-80" stroke="#FFF"
+                              stroke-width="8" marker-end="url(#arrowhead1)" />
+                          </g>
+
+                          <circle cx="34" cy="37" r="67" fill="white" stroke="black" />
+                          <circle cx="666" cy="37" r="67" fill="white" stroke="black" />
+                          <line x1="134" y1="37" x2="500" y2="37" stroke="#FFF"
+                          stroke-width="8" marker-end="url(#arrowhead1)" />
+                        <text x="8" y="45" font-family="Verdana" font-size="20"
+                              fill="black" stroke="black" stroke-width="2">
+                        Y
+                        </text>
+                        <text x="620" y="45" font-family="Verdana" font-size="20"
+                              fill="black" stroke="black" stroke-width="2">
+                        Z
+                        </text>
+                      </svg>
+                    </section>
+                    
+                </section>
 
 
 			</div>
