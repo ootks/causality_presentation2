@@ -1281,7 +1281,6 @@
                         <li> Such a set is said to be <b> semialgebraic</b>.</li>
                         <li> There has been a lot of work on optimization of polynomial functions on semialgebraic sets.</li>
                     </ul>
-                    <object height="700px" type="image/svg+xml" data="semialgebraic.svg"></object>
                 </section>
 
                 <section>
@@ -1320,9 +1319,9 @@
                     </ul>
                 </section>
                 <section>
-                    <h3> Theorem 2: Low Mutual Information Bound </h3>
-                    <section style="margin-top:130px">
-                        <p> We will look at the following Bayesian network:</p>
+                    <h3> Low Mutual Information Bound </h3>
+                    <section>
+                        <p style="margin-top:80px"> We will look at the following Bayesian network:</p>
                     <svg width="700px" height="800px" viewBox="-40 0 800 100">
                           <defs>
                             <marker id="arrowheadb" markerWidth="10" markerHeight="7"
@@ -1356,21 +1355,21 @@
                         </text>
                       </svg>
                     </section>
-                    <section style="margin-top:130px">
+                    <section>
                         <p>Recall that the mutual information between two variables is a measurement of how far they are from being independent. </p>
                         <b> Theorem  - Suppose that the conditional distribution of  $Y$ given $X$ is $\eta$ and the interventional distribution of $Y$ given $X$ is  $\zeta$, then</b>
                             \[
                             \|\zeta - \eta\|_1 \le \frac{1}{\min_{x} \text{Pr}(X = x)}\sqrt{\frac{1}{2}I(X ; U)}
                             \]
                     </section>
-                    <section style="margin-top:130px">
+                    <section>
                         <p>This gives a quantitative version of the idea that if $X$ is independent of the confounder, then the true interventional distribution is equal to the conditional distribution of $X$ given $Y$.</p>
                     </section>
-                    <section style="margin-top:130px">
+                    <section>
                         <p><b> Comments on the proof: </b></p>
                         <ul>
                             <li> Because the $L_1$ ball is polyhedral, bounding $L_1$ distance is equivalent to minimizing some collection of linear functions on the space of interventional distributions.</li>
-                            <li> Mutual information can be related to $L_1$ distance via Pinsker's inequality.</li>
+                            <li> Because the $L_1$ ball is polyhedral, bounding $L_1$ distance is equivalent to minimizing some collection of linear functions on the space of interventional distributions.</li>
                         </ul>
                     </section>
                 </section>
